@@ -6,12 +6,19 @@ import {
     TouchableHighlight,
     StyleSheet
   } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
-import { TextStyle, Icon } from '../components';
-import { Colors, Icons } from '../constants';
-import { Container } from "native-base";
+import { TextStyle } from '../components';
+import { auth } from '../constants/config';
 
 export default class Register extends React.Component {
+    state = { email: '', password: ''}
+
+    handleSignUp = () => {
+        auth.createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+            console.log(error.message);
+        })
+        console.log("Debug", this.state.email)
+      }
+
     componentWillMount() {
         this.props.navigation.openDrawer()
     }
@@ -22,9 +29,9 @@ export default class Register extends React.Component {
                 <Image
                     source={require('../assets/images/robot-prod.png')}
                     style={{ height: 100, width: 100 }} />
-                <TextInput placeholder="Username" style={styles.input} />
-                <TextInput placeholder="Password" style={[styles.input, { marginBottom: 30 }]} secureTextEntry={true} />
-                <TouchableHighlight onPress={() => this.props.navigation.navigate('Register')} style={[styles.button, { backgroundColor: '#D83737' }]}>
+                <TextInput placeholder="Email" style={styles.input} onChangeText={email => this.setState({email})} />
+                <TextInput placeholder="Password" style={[styles.input, { marginBottom: 30 }]} secureTextEntry={true} onChangeText={password => this.setState({password})}/>
+                <TouchableHighlight onPress={this.handleSignUp()} style={[styles.button, { backgroundColor: '#D83737' }]}>
                     <View>
                         <TextStyle style={{ color: '#fff', fontWeight: 'bold' }}>
                             Sign Up!

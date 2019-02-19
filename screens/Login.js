@@ -10,6 +10,10 @@ import {
 
 export default class Login extends React.Component {
 
+  componentDidMount(){
+    
+  }
+
   login = () => {
     this.props.navigation.navigate('Home');
   }
