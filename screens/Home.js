@@ -4,17 +4,23 @@ import { createStackNavigator } from 'react-navigation';
 import { TextStyle, Icon } from '../components';
 import { Colors, Icons } from '../constants';
 import { Container } from "native-base";
+import { auth } from '../constants/config';
 
 class Home extends React.Component {
-  componentWillMount() {
-    this.props.navigation.openDrawer()
+  state = { currentUser : null }
+
+  componentDidMount() {
+    const { currentUser  } = auth;
+    console.log(currentUser.email);
+    this.setState({ currentUser  })
+
   }
 
   render() {
     return (
       <Container style={styles.container}>
         <TextStyle>
-          Home
+          Bienvenido {this.state.currentUser  && this.state.currentUser.email}!
         </TextStyle>
       </Container>
     );
