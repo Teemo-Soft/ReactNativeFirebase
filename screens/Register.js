@@ -11,24 +11,20 @@ import { TextStyle } from '../components';
 import { auth } from '../constants/config';
 
 export default class Register extends React.Component {
-    state = { email: '', password: '' }
+    state = { email: '', password: '' };
 
-    handleSignUp = (correo,contra) => {
-        auth.createUserWithEmailAndPassword(correo,contra)
+    handleSignUp = () => {
+        const { email, password } = this.state;
+        console.log(email)
+        auth.createUserWithEmailAndPassword(email, password)
             .catch(function (error) {
                 var errorCode = error.code;
-                var errorMessage = error.message;
-                if(errorCode == 'auth/weak-password'){
-                    Alert.alert("Advertencia", "Contraseña debe tener 6 caracteres minimo",[{text:"ok"}],{cancelable:true})
+                if (errorCode == 'auth/weak-password') {
+                    Alert.alert("Advertencia", "Contraseña debe tener 6 caracteres minimo", [{ text: "ok" }], { cancelable: true })
                 }
-            })
-        console.log("Debug", this.state.email)
+            });
+        console.log("Debug", email);
     }
-
-    componentWillMount() {
-        //this.props.navigation.openDrawer()
-    }
-
     render() {
         return (
             <View style={styles.container}>
@@ -37,11 +33,11 @@ export default class Register extends React.Component {
                     style={{ height: 100, width: 100 }} />
                 <TextInput placeholder="Email" style={styles.input} onChangeText={email => this.setState({ email })} />
                 <TextInput placeholder="Password" style={[styles.input, { marginBottom: 30 }]} secureTextEntry={true} onChangeText={password => this.setState({ password })} />
-                <TouchableHighlight onPress={this.handleSignUp(this.state.email, this.state.password)} style={[styles.button, { backgroundColor: '#D83737' }]}>
+                <TouchableHighlight onPress={this.handleSignUp} style={[styles.button, { backgroundColor: '#D83737' }]}>
                     <View>
                         <TextStyle style={{ color: '#fff', fontWeight: 'bold' }}>
                             Sign Up!
-                </TextStyle>
+                        </TextStyle>
                     </View>
                 </TouchableHighlight>
             </View>
