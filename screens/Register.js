@@ -17,10 +17,24 @@ export default class Register extends React.Component {
         const { email, password } = this.state;
         console.log(email)
         auth.createUserWithEmailAndPassword(email, password)
+        .then(()=> Alert.alert("Info", "Registrado exitosamente", [{ text: "ok" }], { cancelable: true }))
             .catch(function (error) {
                 var errorCode = error.code;
+                console.log(errorCode);
                 if (errorCode == 'auth/weak-password') {
                     Alert.alert("Advertencia", "Contraseña debe tener 6 caracteres minimo", [{ text: "ok" }], { cancelable: true })
+                }
+
+                if(errorCode == 'auth/email-already-in-use'){
+                    Alert.alert("Advertencia", "Este Email ya esta en uso", [{ text: "ok" }], { cancelable: true })
+                }
+
+                if(errorCode == 'auth/operation-not-allowed'){
+                    Alert.alert("Advertencia", "Usuario no habilitado", [{ text: "ok" }], { cancelable: true })
+                }
+
+                if(errorCode == 'auth/invalid-email'){
+                    Alert.alert("Advertencia", "Correo invalido", [{ text: "ok" }], { cancelable: true })
                 }
             });
         console.log("Debug", email);
