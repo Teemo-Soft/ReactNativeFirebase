@@ -7,15 +7,36 @@ import {
   Image,
   TouchableHighlight
 } from 'react-native';
+import { auth } from '../constants/config';
 
 export default class Login extends React.Component {
-
-  componentDidMount(){
-    
+  state = { email: '', password: '' };
+  componentDidMount() {
+    auth.onAuthStateChanged(user => {
+      this.props.navigation.navigate(user ? 'Home' : 'Login')
+    })
   }
 
   login = () => {
-    this.props.navigation.navigate('Home');
+    const { email, password } = this.state;
+    auth.signInWithEmailAndPassword(email, password)
+    .then(() => this.props.navigation.navigate('Home'))
+    .catch(function (error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      if(errorCode == 'auth/invalid-email'){
+        Alert.alert("Advertencia", "Correo invalido", [{ text: "ok" }], { cancelable: true })
+      }
+      if(errorCode == 'auth/user-disabled'){
+        Alert.alert("Advertencia", "Usuario bloqueado", [{ text: "ok" }], { cancelable: true })
+      }
+      if(errorCode == 'auth/user-not-found'){
+        Alert.alert("Advertencia", "Usuario no encontrado", [{ text: "ok" }], { cancelable: true })
+      }
+      if(errorCode == 'auth/wrong-password'){
+        Alert.alert("Advertencia", "Contraseña incorrecta", [{ text: "ok" }], { cancelable: true })
+      }
+    });
   }
 
   handleLogGoogle = () => {
@@ -28,9 +49,9 @@ export default class Login extends React.Component {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => this.login()},
+        { text: 'OK', onPress: () => this.login() },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   }
 
@@ -40,9 +61,9 @@ export default class Login extends React.Component {
         <Image
           source={require('../assets/images/robot-prod.png')}
           style={{ height: 100, width: 100 }} />
-        <TextInput placeholder="Username" style={styles.input} />
-        <TextInput placeholder="Password" style={[styles.input, { marginBottom: 30 }]} secureTextEntry={true} />
-        <TouchableHighlight onPress={() => this.props.navigation.navigate('Home')} style={[styles.button, { backgroundColor: '#D83737' }]}>
+        <TextInput placeholder="Username" style={styles.input} onChangeText={email => this.setState({ email })} />
+        <TextInput placeholder="Password" style={[styles.input, { marginBottom: 30 }]} secureTextEntry={true} onChangeText={password => this.setState({ password })} />
+        <TouchableHighlight onPress={this.login} style={[styles.button, { backgroundColor: '#D83737' }]}>
           <View>
             <TextStyle style={{ color: '#fff', fontWeight: 'bold' }}>
               Log In
