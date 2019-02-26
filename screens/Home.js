@@ -46,7 +46,7 @@ export default HomeNavigator = createStackNavigator(
           <Icon
             style={{ paddingRight: 15 }}
             size={30}
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => auth.signOut().then(()=> navigation.navigate('Login'))}
             name={Icons.logOut}
           />
         ),
